@@ -1,0 +1,51 @@
+import { AudioWaveform } from 'lucide-react';
+import { ModeToggle } from '../shared/ModeToggle';
+import type { AppMode } from '../../types';
+
+interface AppShellProps {
+  mode: AppMode;
+  onModeChange: (mode: AppMode) => void;
+  children: React.ReactNode;
+}
+
+export function AppShell({ mode, onModeChange, children }: AppShellProps) {
+  return (
+    <div className="min-h-screen bg-bg">
+      <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur-md border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <AudioWaveform size={18} className="text-white" />
+              </div>
+              <h1 className="text-lg font-bold text-text tracking-tight">
+                Prompt Wispr
+              </h1>
+            </div>
+            <ModeToggle mode={mode} onChange={onModeChange} />
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {children}
+      </main>
+
+      <footer className="border-t border-border py-4 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs text-text-secondary text-center">
+            Built by Ryan for{' '}
+            <a
+              href="https://wisprflow.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary-hover transition-colors font-medium"
+            >
+              Wispr Flow
+            </a>
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
