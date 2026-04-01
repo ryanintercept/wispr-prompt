@@ -3,11 +3,13 @@ import { VoiceInput } from './VoiceInput';
 import { TextInput } from './TextInput';
 import { ModelSelector } from './ModelSelector';
 import { TaskTypeSelector } from './TaskTypeSelector';
+import { ExamplePrompts } from './ExamplePrompts';
 import type { TargetModel, TaskType } from '../../types';
 
 interface InputPanelProps {
   rawInput: string;
   onInputChange: (value: string) => void;
+  onExampleSelect: (id: string, rawInput: string) => void;
   targetModel: TargetModel;
   onModelChange: (model: TargetModel) => void;
   taskType: TaskType | 'auto';
@@ -24,6 +26,7 @@ interface InputPanelProps {
 export function InputPanel({
   rawInput,
   onInputChange,
+  onExampleSelect,
   targetModel,
   onModelChange,
   taskType,
@@ -61,6 +64,10 @@ export function InputPanel({
         isRecording={isRecording}
         onSubmit={canOptimize ? onOptimize : undefined}
       />
+
+      {!rawInput.trim() && (
+        <ExamplePrompts onSelect={onExampleSelect} />
+      )}
 
       <div className="px-4 py-3 border-t border-border space-y-3">
         <TaskTypeSelector

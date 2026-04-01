@@ -5,10 +5,12 @@ import type { AppMode } from '../../types';
 interface AppShellProps {
   mode: AppMode;
   onModeChange: (mode: AppMode) => void;
+  isDemoMode: boolean;
+  onToggleDemoMode: () => void;
   children: React.ReactNode;
 }
 
-export function AppShell({ mode, onModeChange, children }: AppShellProps) {
+export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-bg">
       <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur-md border-b border-border">
@@ -21,6 +23,15 @@ export function AppShell({ mode, onModeChange, children }: AppShellProps) {
               <h1 className="text-lg font-bold text-text tracking-tight">
                 Prompt Wispr
               </h1>
+              {isDemoMode && (
+                <button
+                  onClick={onToggleDemoMode}
+                  className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full bg-amber-100 text-amber-700 border border-amber-200 hover:bg-amber-200 transition-colors"
+                  title="Click to toggle demo mode"
+                >
+                  Demo
+                </button>
+              )}
             </div>
             <ModeToggle mode={mode} onChange={onModeChange} />
           </div>

@@ -13,52 +13,57 @@ function App() {
   const [rawInput, setRawInput] = useState('');
   const [targetModel, setTargetModel] = useState<TargetModel>('claude');
   const [taskType, setTaskType] = useState<TaskType | 'auto'>('auto');
+  const [isDemoMode, setIsDemoMode] = useState(true);
+  const [selectedExampleId, setSelectedExampleId] = useState<string | null>(null);
 
-  const optimizer = useOptimizer();
+  const optimizer = useOptimizer(isDemoMode);
 
   const handleTranscript = useCallback((text: string) => {
     setRawInput((prev) => (prev ? prev + ' ' + text : text));
+    setSelectedExampleId(null);
   }, []);
 
   const voice = useVoiceInput(handleTranscript);
+
+  const handleExampleSelect = useCallback((id: string, input: string) => {
+    setSelectedExampleId(id);
+    setRawInput(input);
+  }, []);
 
   const handleOptimize = useCallback(() => {
     if (!rawInput.trim()) return;
 
     if (mode === 'advanced') {
-      optimizer.extract(rawInput).then(() => {
-        // After extraction, user edits then clicks re-optimize
-      });
+      optimizer.extract(rawInput, selectedExampleId);
     } else {
       const override = taskType === 'auto' ? undefined : taskType;
-      optimizer.optimize(rawInput, targetModel, override);
+      optimizer.optimize(rawInput, targetModel, override, selectedExampleId);
     }
-  }, [rawInput, targetModel, taskType, mode, optimizer]);
+  }, [rawInput, targetModel, taskType, mode, optimizer, selectedExampleId]);
 
   const handleRegenerate = useCallback(() => {
     if (!rawInput.trim()) return;
     const override = taskType === 'auto' ? undefined : taskType;
-    optimizer.optimize(rawInput, targetModel, override);
-  }, [rawInput, targetModel, taskType, optimizer]);
+    optimizer.optimize(rawInput, targetModel, override, selectedExampleId);
+  }, [rawInput, targetModel, taskType, optimizer, selectedExampleId]);
 
   const handleReoptimize = useCallback(() => {
     if (optimizer.components) {
-      optimizer.formatFromComponents(optimizer.components, targetModel);
+      optimizer.formatFromComponents(optimizer.components, targetModel, selectedExampleId);
     }
-  }, [optimizer, targetModel]);
+  }, [optimizer, targetModel, selectedExampleId]);
 
   const handleModelChange = useCallback((model: TargetModel) => {
     setTargetModel(model);
-    // If we already have components, re-format for the new model
     if (optimizer.components && optimizer.result) {
-      optimizer.formatFromComponents(optimizer.components, model);
+      optimizer.formatFromComponents(optimizer.components, model, selectedExampleId);
     }
-  }, [optimizer]);
+  }, [optimizer, selectedExampleId]);
 
   const isWorking = optimizer.isOptimizing || optimizer.isExtracting;
 
   return (
-    <AppShell mode={mode} onModeChange={setMode}>
+    <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => setIsDemoMode(!isDemoMode)}>
       <div className={`grid gap-6 ${
         mode === 'advanced' && optimizer.components
           ? 'grid-cols-1 lg:grid-cols-3'
@@ -67,6 +72,7 @@ function App() {
         <InputPanel
           rawInput={rawInput}
           onInputChange={setRawInput}
+          onExampleSelect={handleExampleSelect}
           targetModel={targetModel}
           onModelChange={handleModelChange}
           taskType={taskType}
