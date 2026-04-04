@@ -1,73 +1,98 @@
-# React + TypeScript + Vite
+# Wispr Prompt
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Voice-to-optimized-prompt tool for developers.**
 
-Currently, two official plugins are available:
+Speak your messy, stream-of-consciousness prompt — Wispr Prompt restructures it into a clean, model-specific prompt for Claude or GPT. Built as a portfolio project and internship pitch for [Wispr Flow](https://wisprflow.ai).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+🔗 **[Live Demo](https://wispr-prompt.vercel.app)**
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## What it does
 
-## Expanding the ESLint configuration
+Raw developer prompts are messy. Wispr Prompt takes your unstructured voice or typed input and:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **Extracts** the key components — context, objective, tech stack, constraints, expected output
+2. **Formats** them into the optimal structure for your target model:
+   - **Claude** → XML tags (`<context>`, `<task>`, `<constraints>`, `<output_format>`)
+   - **GPT** → System/User Markdown with headers
+3. **Copies** clean to clipboard, ready to paste
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Modes
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Quick Mode** — single-step: raw input → optimized prompt in one shot
+- **Advanced Mode** — two-step: extract components → review/edit → reformat. Full control over every field before the final prompt is generated.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Features
+
+- 🎤 Voice input via Web Speech API
+- ⚡ Demo mode with 4 pre-built examples (no API key required)
+- 🔄 Auto-reformat when switching between Claude ↔ GPT
+- 🧠 Auto task-type detection (build, debug, refactor, architect, etc.)
+- 📋 One-click copy to clipboard
+- ⌨️ Cmd+Enter keyboard shortcut
+
+## Tech Stack
+
+- **React 18** + **TypeScript** + **Vite**
+- **Tailwind CSS v4** with custom Wispr-inspired theme
+- **Claude API** (Anthropic) via Vercel Edge Functions
+- **Web Speech API** for voice input
+- **Lucide React** for icons
+
+## Local Development
+
+```bash
+# Clone
+git clone https://github.com/ryanintercept/wispr-prompt.git
+cd wispr-prompt
+
+# Install
+npm install
+
+# Set up env (optional — demo mode works without it)
+cp .env.example .env
+# Add your ANTHROPIC_API_KEY to .env
+
+# Run
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The app defaults to **demo mode** — no API key needed to try it out.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Project Structure
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+  components/
+    Input/          # Voice input, text area, model selector, example cards
+    Output/         # Optimized prompt display with copy/regen
+    Advanced/       # Component editor for Advanced mode
+    Layout/         # App shell, header, footer
+    shared/         # Mode toggle, toast, etc.
+  hooks/
+    useOptimizer.ts # Central optimization logic (routes mock vs real)
+    useVoiceInput.ts
+  services/
+    optimizer.ts     # Real Claude API calls
+    mockOptimizer.ts # Demo mode with pre-built examples
+    claude.ts        # API client
+  data/
+    examples.ts      # 4 pre-authored example prompts with full outputs
+  prompts/
+    quick-optimizer.ts # System prompt for Quick mode
+  types/
+    index.ts         # Shared TypeScript interfaces
+api/
+  optimize.ts        # Vercel Edge Function — proxies to Anthropic API
+```
+
+## Deploying to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ryanintercept/wispr-prompt)
+
+Add `ANTHROPIC_API_KEY` as an environment variable for real API calls. Without it, demo mode still works.
+
+---
+
+Built by [Ryan Guerville](https://github.com/ryanintercept) for Wispr Flow.

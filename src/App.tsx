@@ -28,7 +28,8 @@ function App() {
   const handleExampleSelect = useCallback((id: string, input: string) => {
     setSelectedExampleId(id);
     setRawInput(input);
-  }, []);
+    optimizer.reset();
+  }, [optimizer]);
 
   const handleOptimize = useCallback(() => {
     if (!rawInput.trim()) return;

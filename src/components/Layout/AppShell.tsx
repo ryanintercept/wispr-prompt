@@ -42,6 +42,43 @@ export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, chi
         {children}
       </main>
 
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-border">
+        <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary text-center mb-8">How it works</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
+          {[
+            {
+              step: '01',
+              icon: '🎤',
+              title: 'Speak or type',
+              description: 'Dump your raw, messy prompt — voice or keyboard. No need to structure it.',
+            },
+            {
+              step: '02',
+              icon: '✨',
+              title: 'Optimize',
+              description: 'AI extracts context, objective, and constraints, then formats for your target model.',
+            },
+            {
+              step: '03',
+              icon: '📋',
+              title: 'Copy & use',
+              description: 'Paste the structured prompt directly into Claude or ChatGPT for better results.',
+            },
+          ].map(({ step, icon, title, description }) => (
+            <div key={step} className="flex flex-col items-center text-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-surface border border-border flex items-center justify-center text-2xl">
+                {icon}
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{step}</p>
+                <p className="text-sm font-semibold text-text mb-1">{title}</p>
+                <p className="text-xs text-text-secondary leading-relaxed">{description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <footer className="border-t border-border py-4 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs text-text-secondary text-center">

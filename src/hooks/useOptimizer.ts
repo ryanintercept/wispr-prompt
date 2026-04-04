@@ -14,6 +14,7 @@ interface UseOptimizerReturn {
   formatFromComponents: (components: ExtractedComponents, targetModel: TargetModel, exampleId?: string | null) => Promise<void>;
   setComponents: (components: ExtractedComponents) => void;
   clearError: () => void;
+  reset: () => void;
 }
 
 export function useOptimizer(demoMode: boolean): UseOptimizerReturn {
@@ -75,6 +76,11 @@ export function useOptimizer(demoMode: boolean): UseOptimizerReturn {
   }, [demoMode]);
 
   const clearError = useCallback(() => setError(null), []);
+  const reset = useCallback(() => {
+    setResult(null);
+    setComponents(null);
+    setError(null);
+  }, []);
 
   return {
     isOptimizing,
@@ -87,5 +93,6 @@ export function useOptimizer(demoMode: boolean): UseOptimizerReturn {
     formatFromComponents,
     setComponents,
     clearError,
+    reset,
   };
 }
