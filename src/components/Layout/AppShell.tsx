@@ -21,7 +21,7 @@ export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, chi
                 <AudioWaveform size={18} className="text-white" />
               </div>
               <h1 className="text-lg font-bold text-text tracking-tight">
-                Prompt Wispr
+                Wispr Prompt
               </h1>
               {isDemoMode && (
                 <button
