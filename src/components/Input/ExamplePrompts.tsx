@@ -14,7 +14,7 @@ export function ExamplePrompts({ onSelect }: ExamplePromptsProps) {
           <button
             key={example.id}
             onClick={() => onSelect(example.id, example.rawInput)}
-            className="flex items-start gap-2.5 p-3 text-left bg-gray-50 border border-border rounded-xl hover:bg-gray-100 hover:border-gray-300 transition-all group"
+            className="flex items-start gap-2.5 p-3 text-left bg-bg border border-border rounded-xl hover:bg-border/50 hover:border-text-secondary/30 transition-all group"
           >
             <span className="text-lg leading-none mt-0.5">{example.icon}</span>
             <div className="min-w-0">

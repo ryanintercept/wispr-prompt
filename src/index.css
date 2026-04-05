@@ -16,6 +16,18 @@
   --color-error: #EF4444;
 }
 
+.dark {
+  --color-primary: #818CF8;
+  --color-primary-hover: #6366F1;
+  --color-surface: #1F2937;
+  --color-bg: #111827;
+  --color-border: #374151;
+  --color-text: #F9FAFB;
+  --color-text-secondary: #9CA3AF;
+  --color-success: #34D399;
+  --color-error: #F87171;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-bg);
@@ -45,9 +57,10 @@ body {
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-text-secondary) 50%, var(--color-border) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
+  opacity: 0.3;
 }
 
 @keyframes fadeIn {
@@ -66,4 +79,20 @@ body {
 
 .animate-fade-in-scale {
   animation: fadeInScale 0.2s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
 }

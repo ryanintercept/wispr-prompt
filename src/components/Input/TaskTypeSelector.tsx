@@ -17,7 +17,7 @@ export function TaskTypeSelector({ detected, selected, onChange }: TaskTypeSelec
         className={`px-2.5 py-1 text-xs font-medium rounded-full transition-all ${
           selected === 'auto'
             ? 'bg-primary text-white'
-            : 'bg-gray-100 text-text-secondary hover:bg-gray-200'
+            : 'bg-border/50 text-text-secondary hover:bg-border'
         }`}
       >
         Auto{detected ? ` (${TASK_TYPE_LABELS[detected]})` : ''}
@@ -29,7 +29,7 @@ export function TaskTypeSelector({ detected, selected, onChange }: TaskTypeSelec
           className={`px-2.5 py-1 text-xs font-medium rounded-full transition-all ${
             selected === type
               ? 'bg-primary text-white'
-              : 'bg-gray-100 text-text-secondary hover:bg-gray-200'
+              : 'bg-border/50 text-text-secondary hover:bg-border'
           }`}
         >
           {TASK_TYPE_LABELS[type]}

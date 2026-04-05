@@ -7,12 +7,12 @@ interface ModelSelectorProps {
 
 export function ModelSelector({ value, onChange }: ModelSelectorProps) {
   return (
-    <div className="inline-flex bg-gray-100 rounded-lg p-0.5">
+    <div className="inline-flex bg-border/50 rounded-lg p-0.5">
       <button
         onClick={() => onChange('claude')}
         className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
           value === 'claude'
-            ? 'bg-white text-primary shadow-sm'
+            ? 'bg-surface text-primary shadow-sm'
             : 'text-text-secondary hover:text-text'
         }`}
       >
@@ -22,7 +22,7 @@ export function ModelSelector({ value, onChange }: ModelSelectorProps) {
         onClick={() => onChange('gpt')}
         className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
           value === 'gpt'
-            ? 'bg-white text-primary shadow-sm'
+            ? 'bg-surface text-primary shadow-sm'
             : 'text-text-secondary hover:text-text'
         }`}
       >

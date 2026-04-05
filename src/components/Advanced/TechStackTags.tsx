@@ -53,7 +53,7 @@ export function TechStackTags({ tags, onChange }: TechStackTagsProps) {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Add technology..."
-          className="flex-1 px-3 py-1.5 text-xs bg-gray-50 border border-border rounded-lg outline-none focus:border-primary/50 transition-colors"
+          className="flex-1 px-3 py-1.5 text-xs bg-bg border border-border rounded-lg outline-none focus:border-primary/50 transition-colors"
         />
         <button
           onClick={addTag}

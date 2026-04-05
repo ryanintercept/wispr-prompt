@@ -12,10 +12,10 @@ export function ComponentCard({ icon, label, children, defaultOpen = true }: Com
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border border-border rounded-xl overflow-hidden bg-white">
+    <div className="border border-border rounded-xl overflow-hidden bg-surface">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-3 py-2.5 text-left hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between px-3 py-2.5 text-left hover:bg-bg transition-colors"
       >
         <div className="flex items-center gap-2">
           <span className="text-sm">{icon}</span>

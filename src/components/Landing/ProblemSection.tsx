@@ -1,4 +1,5 @@
 import { Mic, Brain, Target } from 'lucide-react';
+import { useFadeIn } from '../../hooks/useFadeIn';
 
 const problems = [
   {
@@ -19,9 +20,11 @@ const problems = [
 ];
 
 export function ProblemSection() {
+  const { ref, isVisible } = useFadeIn();
+
   return (
     <section className="py-20 px-4">
-      <div className="max-w-4xl mx-auto text-center">
+      <div ref={ref} className={`max-w-4xl mx-auto text-center fade-in-up ${isVisible ? 'visible' : ''}`}>
         <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3">The problem</p>
         <h2 className="text-2xl sm:text-3xl font-bold text-text mb-4">
           Voice is the fastest way to think.

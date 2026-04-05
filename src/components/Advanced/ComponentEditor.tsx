@@ -18,7 +18,7 @@ function EditableField({ value, onChange, multiline = false }: { value: string; 
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={3}
-        className="w-full text-xs text-text bg-gray-50 border border-border rounded-lg px-3 py-2 outline-none focus:border-primary/50 resize-none transition-colors leading-relaxed"
+        className="w-full text-xs text-text bg-bg border border-border rounded-lg px-3 py-2 outline-none focus:border-primary/50 resize-none transition-colors leading-relaxed"
       />
     );
   }
@@ -27,7 +27,7 @@ function EditableField({ value, onChange, multiline = false }: { value: string; 
       type="text"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full text-xs text-text bg-gray-50 border border-border rounded-lg px-3 py-2 outline-none focus:border-primary/50 transition-colors"
+      className="w-full text-xs text-text bg-bg border border-border rounded-lg px-3 py-2 outline-none focus:border-primary/50 transition-colors"
     />
   );
 }
@@ -55,7 +55,7 @@ function EditableList({ items, onChange }: { items: string[]; onChange: (items: 
             type="text"
             value={item}
             onChange={(e) => updateItem(index, e.target.value)}
-            className="flex-1 text-xs text-text bg-gray-50 border border-border rounded-lg px-3 py-1.5 outline-none focus:border-primary/50 transition-colors"
+            className="flex-1 text-xs text-text bg-bg border border-border rounded-lg px-3 py-1.5 outline-none focus:border-primary/50 transition-colors"
           />
           <button
             onClick={() => removeItem(index)}

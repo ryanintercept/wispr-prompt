@@ -3,6 +3,7 @@ import { AppShell } from './components/Layout/AppShell';
 import { LandingHero } from './components/Landing/LandingHero';
 import { ProblemSection } from './components/Landing/ProblemSection';
 import { HowItWorks } from './components/Landing/HowItWorks';
+import { WisprCallout } from './components/Landing/WisprCallout';
 import { DashboardSection } from './components/Landing/DashboardSection';
 import { InputPanel } from './components/Input/InputPanel';
 import { OutputPanel } from './components/Output/OutputPanel';
@@ -10,6 +11,7 @@ import { ComponentEditor } from './components/Advanced/ComponentEditor';
 import { Toast } from './components/shared/Toast';
 import { useVoiceInput } from './hooks/useVoiceInput';
 import { useOptimizer } from './hooks/useOptimizer';
+import { useDarkMode } from './hooks/useDarkMode';
 import type { AppMode, TargetModel, TaskType } from './types';
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
   const [isDemoMode, setIsDemoMode] = useState(true);
   const [selectedExampleId, setSelectedExampleId] = useState<string | null>(null);
 
+  const darkMode = useDarkMode();
   const outputRef = useRef<HTMLDivElement>(null);
   const optimizer = useOptimizer(isDemoMode);
 
@@ -76,10 +79,11 @@ function App() {
   const isWorking = optimizer.isOptimizing || optimizer.isExtracting;
 
   return (
-    <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => setIsDemoMode(!isDemoMode)}>
+    <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => setIsDemoMode(!isDemoMode)} isDark={darkMode.isDark} onToggleTheme={darkMode.toggle}>
       <LandingHero />
       <ProblemSection />
       <HowItWorks />
+      <WisprCallout />
 
       <DashboardSection>
         <div className={`grid gap-6 ${

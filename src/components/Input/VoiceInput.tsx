@@ -21,7 +21,7 @@ export function VoiceInput({ isRecording, isSupported, onToggle }: VoiceInputPro
       className={`relative flex items-center justify-center w-12 h-12 rounded-full transition-all ${
         isRecording
           ? 'bg-red-500 text-white shadow-lg shadow-red-500/25'
-          : 'bg-gray-100 text-text-secondary hover:bg-gray-200 hover:text-text'
+          : 'bg-border/50 text-text-secondary hover:bg-border hover:text-text'
       }`}
       title={isRecording ? 'Stop recording' : 'Start recording'}
     >

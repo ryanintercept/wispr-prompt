@@ -1,3 +1,5 @@
+import { useFadeIn } from '../../hooks/useFadeIn';
+
 const steps = [
   {
     step: '01',
@@ -20,9 +22,11 @@ const steps = [
 ];
 
 export function HowItWorks() {
+  const { ref, isVisible } = useFadeIn();
+
   return (
-    <section className="py-20 px-4 border-t border-border">
-      <div className="max-w-3xl mx-auto text-center">
+    <section className="py-20 px-4">
+      <div ref={ref} className={`max-w-3xl mx-auto text-center fade-in-up ${isVisible ? 'visible' : ''}`}>
         <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3">How it works</p>
         <h2 className="text-2xl sm:text-3xl font-bold text-text mb-12">
           Three steps to a better prompt

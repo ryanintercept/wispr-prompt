@@ -1,5 +1,6 @@
 import { AudioWaveform } from 'lucide-react';
 import { ModeToggle } from '../shared/ModeToggle';
+import { ThemeToggle } from '../shared/ThemeToggle';
 import type { AppMode } from '../../types';
 
 interface AppShellProps {
@@ -7,10 +8,12 @@ interface AppShellProps {
   onModeChange: (mode: AppMode) => void;
   isDemoMode: boolean;
   onToggleDemoMode: () => void;
+  isDark: boolean;
+  onToggleTheme: () => void;
   children: React.ReactNode;
 }
 
-export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, children }: AppShellProps) {
+export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, isDark, onToggleTheme, children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-bg">
       <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur-md border-b border-border">
@@ -33,7 +36,10 @@ export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, chi
                 </button>
               )}
             </div>
-            <ModeToggle mode={mode} onChange={onModeChange} />
+            <div className="flex items-center gap-2">
+              <ModeToggle mode={mode} onChange={onModeChange} />
+              <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
+            </div>
           </div>
         </div>
       </header>

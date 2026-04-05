@@ -27,7 +27,7 @@ export function OutputPanel({ prompt, isOptimizing, targetModel, onRegenerate }:
           <div className="flex items-center gap-2">
             <button
               onClick={onRegenerate}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-100 text-text-secondary hover:bg-gray-200 hover:text-text transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-border/50 text-text-secondary hover:bg-border hover:text-text transition-all"
             >
               <RefreshCw size={14} />
               Regen
@@ -44,8 +44,8 @@ export function OutputPanel({ prompt, isOptimizing, targetModel, onRegenerate }:
       ) : (
         <div className="flex-1 flex items-center justify-center p-8 min-h-[200px]">
           <div className="text-center">
-            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-              <FileText size={20} className="text-gray-400" />
+            <div className="w-12 h-12 rounded-full bg-border/30 flex items-center justify-center mx-auto mb-3">
+              <FileText size={20} className="text-text-secondary/50" />
             </div>
             <p className="text-sm text-text-secondary">
               Your optimized prompt will appear here
