@@ -1,5 +1,9 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { AppShell } from './components/Layout/AppShell';
+import { LandingHero } from './components/Landing/LandingHero';
+import { ProblemSection } from './components/Landing/ProblemSection';
+import { HowItWorks } from './components/Landing/HowItWorks';
+import { DashboardSection } from './components/Landing/DashboardSection';
 import { InputPanel } from './components/Input/InputPanel';
 import { OutputPanel } from './components/Output/OutputPanel';
 import { ComponentEditor } from './components/Advanced/ComponentEditor';
@@ -16,6 +20,7 @@ function App() {
   const [isDemoMode, setIsDemoMode] = useState(true);
   const [selectedExampleId, setSelectedExampleId] = useState<string | null>(null);
 
+  const outputRef = useRef<HTMLDivElement>(null);
   const optimizer = useOptimizer(isDemoMode);
 
   const handleTranscript = useCallback((text: string) => {
@@ -61,48 +66,63 @@ function App() {
     }
   }, [optimizer, selectedExampleId]);
 
+  // Mobile scroll-to-output after optimization completes
+  useEffect(() => {
+    if (optimizer.result && outputRef.current && window.innerWidth < 1024) {
+      outputRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [optimizer.result]);
+
   const isWorking = optimizer.isOptimizing || optimizer.isExtracting;
 
   return (
     <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => setIsDemoMode(!isDemoMode)}>
-      <div className={`grid gap-6 ${
-        mode === 'advanced' && optimizer.components
-          ? 'grid-cols-1 lg:grid-cols-3'
-          : 'grid-cols-1 lg:grid-cols-2'
-      }`}>
-        <InputPanel
-          rawInput={rawInput}
-          onInputChange={setRawInput}
-          onExampleSelect={handleExampleSelect}
-          targetModel={targetModel}
-          onModelChange={handleModelChange}
-          taskType={taskType}
-          onTaskTypeChange={setTaskType}
-          detectedTaskType={optimizer.result?.taskType ?? null}
-          isRecording={voice.isRecording}
-          isVoiceSupported={voice.isSupported}
-          interimTranscript={voice.interimTranscript}
-          onToggleRecording={voice.toggleRecording}
-          onOptimize={handleOptimize}
-          isOptimizing={isWorking}
-        />
+      <LandingHero />
+      <ProblemSection />
+      <HowItWorks />
 
-        {mode === 'advanced' && optimizer.components && (
-          <ComponentEditor
-            components={optimizer.components}
-            onChange={optimizer.setComponents}
-            onReoptimize={handleReoptimize}
-            isOptimizing={optimizer.isOptimizing}
+      <DashboardSection>
+        <div className={`grid gap-6 ${
+          mode === 'advanced' && optimizer.components
+            ? 'grid-cols-1 lg:grid-cols-3'
+            : 'grid-cols-1 lg:grid-cols-2'
+        }`}>
+          <InputPanel
+            rawInput={rawInput}
+            onInputChange={setRawInput}
+            onExampleSelect={handleExampleSelect}
+            targetModel={targetModel}
+            onModelChange={handleModelChange}
+            taskType={taskType}
+            onTaskTypeChange={setTaskType}
+            detectedTaskType={optimizer.result?.taskType ?? null}
+            isRecording={voice.isRecording}
+            isVoiceSupported={voice.isSupported}
+            interimTranscript={voice.interimTranscript}
+            onToggleRecording={voice.toggleRecording}
+            onOptimize={handleOptimize}
+            isOptimizing={isWorking}
           />
-        )}
 
-        <OutputPanel
-          prompt={optimizer.result?.optimizedPrompt ?? ''}
-          isOptimizing={optimizer.isOptimizing}
-          targetModel={targetModel}
-          onRegenerate={handleRegenerate}
-        />
-      </div>
+          {mode === 'advanced' && optimizer.components && (
+            <ComponentEditor
+              components={optimizer.components}
+              onChange={optimizer.setComponents}
+              onReoptimize={handleReoptimize}
+              isOptimizing={optimizer.isOptimizing}
+            />
+          )}
+
+          <div ref={outputRef}>
+            <OutputPanel
+              prompt={optimizer.result?.optimizedPrompt ?? ''}
+              isOptimizing={optimizer.isOptimizing}
+              targetModel={targetModel}
+              onRegenerate={handleRegenerate}
+            />
+          </div>
+        </div>
+      </DashboardSection>
 
       {optimizer.error && (
         <Toast
