@@ -1,13 +1,38 @@
 import { ArrowDown } from 'lucide-react';
 import { AnimatedWaveform } from './AnimatedWaveform';
+import { useState, useRef, useCallback } from 'react';
 
 export function LandingHero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [spotlight, setSpotlight] = useState({ x: 50, y: 50 });
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const rect = sectionRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setSpotlight({
+      x: ((e.clientX - rect.left) / rect.width) * 100,
+      y: ((e.clientY - rect.top) / rect.height) * 100,
+    });
+  }, []);
+
   const scrollToDashboard = () => {
     document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section className="min-h-[90vh] flex flex-col items-center justify-center text-center px-4 relative overflow-hidden">
+    <section
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      className="min-h-[90vh] flex flex-col items-center justify-center text-center px-4 relative overflow-hidden"
+    >
+      {/* Mouse-follow spotlight */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 transition-none"
+        style={{
+          background: `radial-gradient(600px circle at ${spotlight.x}% ${spotlight.y}%, rgba(77, 101, 255, 0.08), transparent 60%)`,
+        }}
+      />
+
       {/* Gradient orbs for depth */}
       <div className="gradient-orb bg-primary/30 w-[500px] h-[500px] -top-20 -left-32 animate-float" />
       <div className="gradient-orb bg-primary/20 w-[400px] h-[400px] top-1/2 -right-20 animate-float" style={{ animationDelay: '2s' }} />

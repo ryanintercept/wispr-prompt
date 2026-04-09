@@ -17,7 +17,7 @@ export function ModelSelector({ value, onChange }: ModelSelectorProps) {
           onClick={() => onChange(model)}
           className={`px-2.5 py-1.5 text-xs font-medium rounded-md transition-all ${
             value === model
-              ? 'bg-surface text-primary shadow-sm'
+              ? 'bg-surface text-primary shadow-sm ring-1 ring-primary/30 shadow-primary/20'
               : 'text-text-secondary hover:text-text'
           }`}
         >

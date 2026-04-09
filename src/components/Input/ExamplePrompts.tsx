@@ -10,11 +10,12 @@ export function ExamplePrompts({ onSelect }: ExamplePromptsProps) {
     <div className="px-4 pb-3">
       <p className="text-xs text-text-secondary mb-2 font-medium">Try an example:</p>
       <div className="grid grid-cols-2 gap-2">
-        {EXAMPLES.map((example) => (
+        {EXAMPLES.map((example, i) => (
           <button
             key={example.id}
             onClick={() => onSelect(example.id, example.rawInput)}
-            className="flex items-start gap-2.5 p-3 text-left bg-bg border border-border rounded-xl hover:bg-border/50 hover:border-text-secondary/30 transition-all group"
+            className="flex items-start gap-2.5 p-3 text-left bg-bg border border-border rounded-xl hover:bg-border/50 hover:border-text-secondary/30 hover:shadow-sm hover:-translate-y-0.5 transition-all group animate-fade-in"
+            style={{ animationDelay: `${i * 60}ms`, animationFillMode: 'both' }}
           >
             <span className="text-lg leading-none mt-0.5">{example.icon}</span>
             <div className="min-w-0">

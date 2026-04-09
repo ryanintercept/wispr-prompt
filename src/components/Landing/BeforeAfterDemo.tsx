@@ -1,4 +1,6 @@
 import { ArrowRight, Mic, FileCode } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { useFadeIn } from '../../hooks/useFadeIn';
 
 const messy = `okay so i need to build like a dashboard thing for users to track their workouts, it should show like the past week and let them add new ones, oh and it needs to work on mobile too, using react`;
 
@@ -21,9 +23,63 @@ React, mobile-responsive
 - Support creating new workout entries
 </constraints>`;
 
-export function BeforeAfterDemo() {
+function SyntaxHighlight({ text }: { text: string }) {
+  const parts = text.split(/(<\/?[a-z_]+>)/g);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-3 items-stretch max-w-5xl mx-auto mt-12">
+    <>
+      {parts.map((part, i) =>
+        /^<\/?[a-z_]+>$/.test(part) ? (
+          <span key={i} className="text-primary/80">{part}</span>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
+
+export function BeforeAfterDemo() {
+  const { ref, isVisible } = useFadeIn();
+  const [typedMessy, setTypedMessy] = useState('');
+  const [showStructured, setShowStructured] = useState(false);
+  const [structuredChars, setStructuredChars] = useState(0);
+  const hasStarted = useRef(false);
+
+  useEffect(() => {
+    if (!isVisible || hasStarted.current) return;
+    hasStarted.current = true;
+
+    // Type out the messy prompt
+    let i = 0;
+    const typeInterval = setInterval(() => {
+      i++;
+      setTypedMessy(messy.slice(0, i));
+      if (i >= messy.length) {
+        clearInterval(typeInterval);
+        // Pause then reveal structured output
+        setTimeout(() => {
+          setShowStructured(true);
+          let j = 0;
+          const buildInterval = setInterval(() => {
+            j += 3;
+            setStructuredChars(j);
+            if (j >= structured.length) {
+              setStructuredChars(structured.length);
+              clearInterval(buildInterval);
+            }
+          }, 12);
+        }, 400);
+      }
+    }, 18);
+
+    return () => clearInterval(typeInterval);
+  }, [isVisible]);
+
+  return (
+    <div
+      ref={ref}
+      className={`grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-3 items-stretch max-w-5xl mx-auto mt-12 fade-in-up ${isVisible ? 'visible' : ''}`}
+    >
       {/* Before */}
       <div className="rounded-2xl border border-border bg-surface overflow-hidden shadow-sm">
         <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
@@ -34,16 +90,20 @@ export function BeforeAfterDemo() {
             Raw voice input
           </span>
         </div>
-        <div className="p-5 text-left">
+        <div className="p-5 text-left min-h-[120px]">
           <p className="text-sm text-text leading-relaxed font-sans italic">
-            "{messy}"
+            "{typedMessy}
+            {typedMessy.length < messy.length && (
+              <span className="inline-block w-0.5 h-4 bg-text-secondary ml-0.5 animate-pulse align-middle" />
+            )}
+            {typedMessy.length >= messy.length && '"'}
           </p>
         </div>
       </div>
 
       {/* Arrow */}
       <div className="flex items-center justify-center md:px-2">
-        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
+        <div className={`w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30 transition-all duration-500 ${showStructured ? 'scale-110 shadow-primary/50' : ''}`}>
           <ArrowRight size={18} className="text-white md:rotate-0 rotate-90" />
         </div>
       </div>
@@ -58,9 +118,16 @@ export function BeforeAfterDemo() {
             Optimized prompt
           </span>
         </div>
-        <div className="p-5 text-left">
+        <div className="p-5 text-left min-h-[120px]">
           <pre className="text-xs text-text leading-relaxed font-mono whitespace-pre-wrap">
-            {structured}
+            {showStructured && (
+              <>
+                <SyntaxHighlight text={structured.slice(0, structuredChars)} />
+                {structuredChars < structured.length && (
+                  <span className="inline-block w-0.5 h-3 bg-primary ml-0.5 animate-pulse align-middle" />
+                )}
+              </>
+            )}
           </pre>
         </div>
       </div>

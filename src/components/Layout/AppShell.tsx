@@ -1,6 +1,7 @@
 import { AudioWaveform } from 'lucide-react';
 import { ModeToggle } from '../shared/ModeToggle';
 import { ThemeToggle } from '../shared/ThemeToggle';
+import { useScrollProgress } from '../../hooks/useScrollProgress';
 import type { AppMode } from '../../types';
 
 interface AppShellProps {
@@ -14,8 +15,15 @@ interface AppShellProps {
 }
 
 export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, isDark, onToggleTheme, children }: AppShellProps) {
+  const progress = useScrollProgress();
+
   return (
     <div className="min-h-screen bg-bg">
+      {/* Scroll progress bar */}
+      <div
+        className="fixed top-0 left-0 h-[2px] bg-primary z-50 transition-none"
+        style={{ width: `${progress}%` }}
+      />
       <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
