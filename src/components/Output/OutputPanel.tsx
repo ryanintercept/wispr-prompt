@@ -2,6 +2,7 @@ import { RefreshCw, FileText } from 'lucide-react';
 import { CopyButton } from './CopyButton';
 import { PromptDisplay } from './PromptDisplay';
 import { LoadingState } from '../shared/LoadingState';
+import { MODEL_LABELS } from '../../types';
 import type { TargetModel } from '../../types';
 
 interface OutputPanelProps {
@@ -20,7 +21,7 @@ export function OutputPanel({ prompt, isOptimizing, targetModel, onRegenerate }:
         <div className="flex items-center gap-2">
           <FileText size={16} className="text-text-secondary" />
           <span className="text-sm font-medium text-text">
-            Optimized for {targetModel === 'claude' ? 'Claude' : 'GPT'}
+            Optimized for {MODEL_LABELS[targetModel]}
           </span>
         </div>
         {hasPrompt && !isOptimizing && (

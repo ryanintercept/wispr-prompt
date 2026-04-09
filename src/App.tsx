@@ -4,6 +4,7 @@ import { LandingHero } from './components/Landing/LandingHero';
 import { ProblemSection } from './components/Landing/ProblemSection';
 import { HowItWorks } from './components/Landing/HowItWorks';
 import { WisprCallout } from './components/Landing/WisprCallout';
+import { NativeIntegration } from './components/Landing/NativeIntegration';
 import { DashboardSection } from './components/Landing/DashboardSection';
 import { InputPanel } from './components/Input/InputPanel';
 import { OutputPanel } from './components/Output/OutputPanel';
@@ -84,6 +85,7 @@ function App() {
       <ProblemSection />
       <HowItWorks />
       <WisprCallout />
+      <NativeIntegration />
 
       <DashboardSection>
         <div className={`grid gap-6 ${

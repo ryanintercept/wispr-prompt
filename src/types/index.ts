@@ -1,6 +1,22 @@
 export type TaskType = 'build' | 'debug' | 'refactor' | 'explain' | 'architect' | 'review' | 'test' | 'document';
 
-export type TargetModel = 'claude' | 'gpt';
+export type TargetModel = 'claude' | 'gpt' | 'gemini' | 'llama' | 'reasoning';
+
+export const MODEL_LABELS: Record<TargetModel, string> = {
+  claude: 'Claude',
+  gpt: 'GPT',
+  gemini: 'Gemini',
+  llama: 'Llama',
+  reasoning: 'o1 / o3',
+};
+
+export const MODEL_DESCRIPTIONS: Record<TargetModel, string> = {
+  claude: 'Anthropic — XML-tagged, structured',
+  gpt: 'OpenAI — System/user, markdown',
+  gemini: 'Google — Conversational, structured',
+  llama: 'Meta — Instruction-tuned, direct',
+  reasoning: 'OpenAI reasoning — Goal-focused',
+};
 
 export type AppMode = 'quick' | 'advanced';
 

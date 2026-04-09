@@ -10,6 +10,9 @@ export interface ExamplePrompt {
   optimizedPrompts: {
     claude: string;
     gpt: string;
+    gemini: string;
+    llama: string;
+    reasoning: string;
   };
 }
 
@@ -102,6 +105,70 @@ React + TypeScript + Tailwind CSS + Recharts
 
 ## Output
 Single TypeScript component file with inline comments on key decisions. Export as default.`,
+
+      gemini: `# Task: Build a Responsive React Dashboard Component
+
+You are helping build a production React dashboard. Approach this as a senior frontend engineer would.
+
+## Project Context
+- Framework: React + TypeScript
+- Styling: Tailwind CSS only (no custom CSS)
+- Charts: Recharts
+- Data source: REST API
+
+## Goal
+Create a single dashboard component with:
+1. Sidebar navigation (collapses to hamburger on mobile <768px)
+2. Multiple chart panels (line, bar, area) using Recharts
+3. Data fetching with loading skeletons, error states, and empty states
+4. Dark mode toggle using Tailwind's \`dark:\` modifier
+5. Responsive grid layout (multi-column → single column on mobile)
+
+## Constraints
+- Tailwind only — no custom CSS files
+- React hooks only for state — no Redux, Zustand, or other libraries
+- Every async panel needs a loading skeleton
+- Handle all error states with user-facing messages
+
+## Deliverable
+Provide a single TypeScript component file. Include inline comments explaining key architectural decisions. Export as default.`,
+
+      llama: `[INST] You are a senior React developer. Build a production-quality dashboard component.
+
+Requirements:
+- React + TypeScript + Tailwind CSS + Recharts
+- Sidebar navigation that collapses to hamburger menu below 768px
+- Chart panels: line chart, bar chart, area chart (Recharts)
+- REST API data fetching with loading skeletons, error states, and empty data handling
+- Dark mode via Tailwind's dark: modifier with toggle
+- Responsive grid: multi-column desktop → single column mobile
+
+Constraints:
+- Tailwind only, no custom CSS
+- React hooks only, no external state libraries
+- Every async panel must have a loading skeleton
+- All error states need user-facing messages
+
+Output: A single TypeScript component file with inline comments on key decisions. Export as default. [/INST]`,
+
+      reasoning: `Build a responsive React dashboard component.
+
+Stack: React + TypeScript + Tailwind CSS + Recharts, REST API backend.
+
+Requirements:
+- Sidebar nav (collapses to hamburger below 768px)
+- Chart panels: line, bar, area
+- Loading skeletons, error states, empty states for all data panels
+- Dark mode via Tailwind dark: modifier
+- Responsive: multi-column desktop, single column mobile
+
+Hard constraints:
+- Tailwind only (no custom CSS)
+- React hooks only (no Redux/Zustand)
+- All async panels need skeletons
+- All error paths need user-facing messages
+
+Deliver one TypeScript component file with inline comments on architectural decisions. Default export.`,
     },
   },
   {
@@ -185,6 +252,82 @@ Users on **mobile browsers** are randomly getting logged out after a few minutes
 - Don't break the existing desktop flow
 - Handle network interruptions with retry + backoff
 - Keep refresh token rotation secure`,
+
+      gemini: `# Task: Debug Intermittent Mobile Logout in JWT Auth System
+
+You are an expert in authentication systems and mobile browser quirks. Help diagnose a production bug.
+
+## Current Setup
+- JWT auth with refresh tokens
+- Access token TTL: 15 minutes
+- Refresh endpoint: \`/api/auth/refresh\`
+- Works correctly on desktop browsers
+
+## The Bug
+Mobile browser users are randomly logged out after a few minutes. Desktop is unaffected.
+
+## Investigate These Causes (in order)
+1. **Mobile timer throttling** — setTimeout/setInterval are heavily throttled on backgrounded mobile tabs
+2. **Silent fetch failures** — mobile networks drop connections; refresh requests may fail without retry
+3. **Race conditions** — multiple tabs or re-renders triggering simultaneous refresh requests
+4. **Storage eviction** — Mobile Safari has aggressive localStorage/sessionStorage eviction
+
+## Constraints
+- Don't break the existing desktop flow
+- Handle network interruptions with retry + exponential backoff
+- Preserve refresh token rotation security
+- Solution must work on Safari iOS, Chrome Android, Firefox mobile
+
+## Deliverables
+1. Root cause analysis with evidence
+2. Code fix with before/after comparison
+3. Mobile-specific testing strategy`,
+
+      llama: `[INST] You are a senior backend/auth engineer. Debug an intermittent mobile logout bug.
+
+System:
+- JWT with refresh tokens
+- Access token expires in 15 minutes
+- Refresh endpoint: /api/auth/refresh
+- Works on desktop, fails intermittently on mobile
+
+Investigate these likely causes:
+1. Mobile browser timer throttling on backgrounded tabs
+2. Silent fetch failures on flaky mobile networks
+3. Race conditions from multiple tabs hitting refresh simultaneously
+4. Mobile Safari localStorage/sessionStorage eviction
+
+Constraints:
+- Do not break desktop flow
+- Add retry with exponential backoff for network failures
+- Keep refresh token rotation secure
+- Must work on Safari iOS, Chrome Android, Firefox mobile
+
+Output:
+1. Root cause analysis with evidence
+2. Before/after code fix
+3. Mobile-specific test strategy [/INST]`,
+
+      reasoning: `Diagnose and fix intermittent mobile logout in a JWT auth system.
+
+Setup:
+- JWT + refresh tokens, 15 min access TTL
+- Refresh endpoint: /api/auth/refresh
+- Desktop works, mobile users get logged out randomly after a few minutes
+
+Likely causes to investigate:
+1. Mobile timer throttling on backgrounded tabs
+2. Silent fetch failures on mobile networks
+3. Race conditions from concurrent refresh attempts
+4. Mobile Safari storage eviction
+
+Constraints:
+- Preserve desktop behavior
+- Retry network failures with exponential backoff
+- Keep refresh token rotation secure
+- Must work on Safari iOS, Chrome Android, Firefox mobile
+
+Deliver: root cause + evidence, code fix (before/after), mobile test plan.`,
     },
   },
   {
@@ -298,6 +441,99 @@ Node.js + PostgreSQL + Express or Fastify
 
 ## Output
 Full architecture doc with SQL schemas, middleware pseudocode, route structure, and trade-off analysis.`,
+
+      gemini: `# Task: Multi-Tenant SaaS Backend Architecture Design
+
+You are a senior backend architect. Design a scalable, secure multi-tenant SaaS backend.
+
+## Tech Stack
+Node.js + PostgreSQL + Express or Fastify
+
+## Design Areas
+
+### 1. Multi-Tenancy Strategy
+Compare three approaches:
+- Row-level security (RLS)
+- Separate schemas per tenant
+- \`tenant_id\` column on every table
+
+Recommend one for ~100s of tenants with reasoning. Provide core schema (tenants, users, api_keys, plans).
+
+### 2. Tiered Rate Limiting
+- Define limits per tier (Free / Pro / Enterprise)
+- Where to enforce (middleware vs. gateway)
+- **Must support real-time tier changes without restart**
+
+### 3. API Key Authentication
+- Generation, hashed storage, validation
+- Tenant identification from key
+- Rotation strategy
+
+### 4. API Structure
+- RESTful routes with tenant context
+- Middleware chain: auth → tenant resolution → rate limit → handler
+
+## Constraints
+- PostgreSQL only for MVP (no Redis)
+- Horizontally scalable
+- Zero cross-tenant data leakage
+- API keys hashed, never plaintext
+
+## Deliverable
+Architecture document with SQL schemas, middleware pseudocode, route structure, and trade-off analysis for each major decision.`,
+
+      llama: `[INST] You are a senior backend architect specializing in multi-tenant SaaS on Node.js + PostgreSQL.
+
+Design the backend architecture for a new multi-tenant SaaS app.
+
+Stack: Node.js + PostgreSQL + Express or Fastify
+
+Cover these design areas:
+
+1. Multi-tenancy database strategy
+   - Compare row-level security vs separate schemas vs tenant_id column
+   - Recommend one for ~100s of tenants
+   - Provide core schema (tenants, users, api_keys, plans)
+
+2. Tiered rate limiting
+   - Free / Pro / Enterprise tiers
+   - Middleware vs gateway enforcement
+   - Real-time tier changes without restart
+
+3. API key authentication
+   - Generation, hashed storage, validation
+   - Tenant identification from key
+   - Rotation strategy
+
+4. API structure
+   - RESTful routes with tenant context
+   - Middleware chain: auth → tenant → rate limit → handler
+
+Constraints:
+- PostgreSQL only for MVP (no Redis)
+- Horizontally scalable
+- Zero cross-tenant leakage
+- API keys hashed, never plaintext
+
+Output: SQL schemas, middleware pseudocode, route structure, trade-off analysis. [/INST]`,
+
+      reasoning: `Design multi-tenant SaaS backend architecture.
+
+Stack: Node.js + PostgreSQL + Express/Fastify. Scale: ~100s of tenants.
+
+Decide and justify:
+1. Multi-tenancy strategy (RLS vs schemas vs tenant_id column) — pick one
+2. Tiered rate limiting (Free/Pro/Enterprise) — must support real-time tier changes
+3. API key auth (generation, hashed storage, rotation, tenant identification)
+4. API structure (middleware chain: auth → tenant → rate limit → handler)
+
+Hard constraints:
+- PostgreSQL only (no Redis for MVP)
+- Horizontally scalable
+- Zero cross-tenant data leakage
+- API keys must be hashed at rest
+
+Deliver: core SQL schema, middleware pseudocode, RESTful route structure, trade-off analysis for each major decision.`,
     },
   },
   {
@@ -410,6 +646,78 @@ All written in JavaScript with \`any\` types everywhere.
 
 ## Output
 All 6 files with full TypeScript types (zero \`any\`), plus a brief migration guide showing before/after route setup.`,
+
+      gemini: `# Task: Refactor Monolithic Express Middleware
+
+You are a senior Node.js/Express engineer specializing in middleware architecture and TypeScript migrations.
+
+## Current State
+A single ~500-line Express middleware file handles four concerns in one function:
+1. JWT token validation + \`req.user\` population
+2. Role-based access control
+3. Rate limiting
+4. Request logging
+
+Written in JavaScript with \`any\` types throughout. All route handlers depend on \`req.user\` being set.
+
+## Goal
+Break it into separate, single-responsibility middleware files with proper TypeScript types.
+
+## Required Files
+- \`auth.ts\` — JWT verification + \`req.user\` population
+- \`rbac.ts\` — Factory: \`rbacMiddleware(allowedRoles: Role[])\`
+- \`rateLimit.ts\` — Per-user/per-IP limiting with 429 + Retry-After
+- \`logger.ts\` — Structured logging (no request bodies)
+- \`types.ts\` — \`AuthenticatedRequest\`, \`User\`, \`Role\`
+- \`index.ts\` — Re-exports + backward-compat \`defaultMiddleware\` stack
+
+## Critical Constraint
+**\`req.user\` must remain available** to all existing route handlers without changes to their signatures.
+
+## Constraints
+- Zero \`any\` types
+- Each middleware independently testable
+- All middlewares composable
+
+## Deliverable
+All 6 files plus a brief migration guide with before/after route setup examples.`,
+
+      llama: `[INST] You are a senior Node.js/Express engineer. Refactor a monolithic middleware file.
+
+Current state:
+- ~500-line Express middleware in one file
+- Handles JWT auth, RBAC, rate limiting, and request logging in one function
+- JavaScript with \`any\` types everywhere
+- All route handlers depend on req.user being set
+
+Refactor into:
+- auth.ts — JWT verification + req.user population
+- rbac.ts — Factory: rbacMiddleware(allowedRoles: Role[])
+- rateLimit.ts — Per-user/per-IP with 429 + Retry-After
+- logger.ts — Structured logging, no request bodies
+- types.ts — AuthenticatedRequest, User, Role types
+- index.ts — Re-exports + backward-compat defaultMiddleware stack
+
+Critical:
+- req.user contract must not change — existing handlers must work unmodified
+- Zero any types
+- Each middleware independently testable
+- Composable
+
+Deliver all 6 files plus a brief migration guide. [/INST]`,
+
+      reasoning: `Refactor a 500-line monolithic Express middleware into clean single-responsibility modules.
+
+Current: one function does JWT auth, RBAC, rate limiting, and logging. All JavaScript with \`any\` types. Route handlers depend on \`req.user\`.
+
+Split into: auth.ts (JWT + req.user), rbac.ts (role factory), rateLimit.ts (429 + Retry-After), logger.ts (no bodies), types.ts, index.ts (backward-compat default stack).
+
+Hard constraints:
+- req.user contract must not change — existing route handlers stay untouched
+- Zero \`any\` types
+- Each middleware independently testable and composable
+
+Deliver all 6 files plus a brief before/after migration guide.`,
     },
   },
 ];

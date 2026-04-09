@@ -3,7 +3,18 @@ import { getQuickOptimizerPrompt } from '../prompts/quick-optimizer';
 import { EXTRACTOR_SYSTEM_PROMPT } from '../prompts/extractor';
 import { CLAUDE_FORMATTER_SYSTEM_PROMPT } from '../prompts/claude-formatter';
 import { GPT_FORMATTER_SYSTEM_PROMPT } from '../prompts/gpt-formatter';
+import { GEMINI_FORMATTER_SYSTEM_PROMPT } from '../prompts/gemini-formatter';
+import { LLAMA_FORMATTER_SYSTEM_PROMPT } from '../prompts/llama-formatter';
+import { REASONING_FORMATTER_SYSTEM_PROMPT } from '../prompts/reasoning-formatter';
 import type { ExtractedComponents, OptimizationResult, TargetModel, TaskType } from '../types';
+
+const FORMATTER_PROMPTS: Record<TargetModel, string> = {
+  claude: CLAUDE_FORMATTER_SYSTEM_PROMPT,
+  gpt: GPT_FORMATTER_SYSTEM_PROMPT,
+  gemini: GEMINI_FORMATTER_SYSTEM_PROMPT,
+  llama: LLAMA_FORMATTER_SYSTEM_PROMPT,
+  reasoning: REASONING_FORMATTER_SYSTEM_PROMPT,
+};
 
 function parseQuickResponse(responseText: string): { components: ExtractedComponents; prompt: string } {
   const componentsSplit = responseText.split('---COMPONENTS---');
@@ -50,9 +61,7 @@ export async function formatComponents(
   components: ExtractedComponents,
   targetModel: TargetModel,
 ): Promise<string> {
-  const systemPrompt = targetModel === 'claude'
-    ? CLAUDE_FORMATTER_SYSTEM_PROMPT
-    : GPT_FORMATTER_SYSTEM_PROMPT;
+  const systemPrompt = FORMATTER_PROMPTS[targetModel];
 
   const response = await callClaude({
     system: systemPrompt,

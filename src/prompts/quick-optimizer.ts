@@ -1,11 +1,20 @@
 import { CLAUDE_FORMATTER_SYSTEM_PROMPT } from './claude-formatter';
 import { GPT_FORMATTER_SYSTEM_PROMPT } from './gpt-formatter';
+import { GEMINI_FORMATTER_SYSTEM_PROMPT } from './gemini-formatter';
+import { LLAMA_FORMATTER_SYSTEM_PROMPT } from './llama-formatter';
+import { REASONING_FORMATTER_SYSTEM_PROMPT } from './reasoning-formatter';
 import type { TargetModel } from '../types';
 
+const FORMATTER_PROMPTS: Record<TargetModel, string> = {
+  claude: CLAUDE_FORMATTER_SYSTEM_PROMPT,
+  gpt: GPT_FORMATTER_SYSTEM_PROMPT,
+  gemini: GEMINI_FORMATTER_SYSTEM_PROMPT,
+  llama: LLAMA_FORMATTER_SYSTEM_PROMPT,
+  reasoning: REASONING_FORMATTER_SYSTEM_PROMPT,
+};
+
 export function getQuickOptimizerPrompt(targetModel: TargetModel): string {
-  const formatterRules = targetModel === 'claude'
-    ? CLAUDE_FORMATTER_SYSTEM_PROMPT
-    : GPT_FORMATTER_SYSTEM_PROMPT;
+  const formatterRules = FORMATTER_PROMPTS[targetModel];
 
   return `You are an expert prompt engineering system. You perform two tasks in sequence:
 
