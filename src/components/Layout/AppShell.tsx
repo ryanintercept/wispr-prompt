@@ -1,6 +1,5 @@
 import { AudioWaveform } from 'lucide-react';
 import { ModeToggle } from '../shared/ModeToggle';
-import { ThemeToggle } from '../shared/ThemeToggle';
 import { useScrollProgress } from '../../hooks/useScrollProgress';
 import type { AppMode } from '../../types';
 
@@ -9,12 +8,10 @@ interface AppShellProps {
   onModeChange: (mode: AppMode) => void;
   isDemoMode: boolean;
   onToggleDemoMode: () => void;
-  isDark: boolean;
-  onToggleTheme: () => void;
   children: React.ReactNode;
 }
 
-export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, isDark, onToggleTheme, children }: AppShellProps) {
+export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, children }: AppShellProps) {
   const progress = useScrollProgress();
 
   return (
@@ -37,7 +34,7 @@ export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, isD
               {isDemoMode && (
                 <button
                   onClick={onToggleDemoMode}
-                  className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full bg-amber-100 text-amber-700 border border-amber-200 hover:bg-amber-200 transition-colors"
+                  className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 transition-colors"
                   title="Click to toggle demo mode"
                 >
                   Demo
@@ -46,7 +43,6 @@ export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, isD
             </div>
             <div className="flex items-center gap-2">
               <ModeToggle mode={mode} onChange={onModeChange} />
-              <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
             </div>
           </div>
         </div>

@@ -23,7 +23,7 @@ function App() {
   const [isDemoMode, setIsDemoMode] = useState(true);
   const [selectedExampleId, setSelectedExampleId] = useState<string | null>(null);
 
-  const darkMode = useDarkMode();
+  useDarkMode();
   const outputRef = useRef<HTMLDivElement>(null);
   const optimizer = useOptimizer(isDemoMode);
 
@@ -80,7 +80,7 @@ function App() {
   const isWorking = optimizer.isOptimizing || optimizer.isExtracting;
 
   return (
-    <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => setIsDemoMode(!isDemoMode)} isDark={darkMode.isDark} onToggleTheme={darkMode.toggle}>
+    <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => setIsDemoMode(!isDemoMode)}>
       <LandingHero />
       <ProblemSection />
       <HowItWorks />
