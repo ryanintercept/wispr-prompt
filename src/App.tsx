@@ -6,6 +6,7 @@ import { HowItWorks } from './components/Landing/HowItWorks';
 import { WisprCallout } from './components/Landing/WisprCallout';
 import { NativeIntegration } from './components/Landing/NativeIntegration';
 import { ModelStrip } from './components/Landing/ModelStrip';
+import { WhatsNext } from './components/Landing/WhatsNext';
 import { DashboardSection } from './components/Landing/DashboardSection';
 import { InputPanel } from './components/Input/InputPanel';
 import { OutputPanel } from './components/Output/OutputPanel';
@@ -88,6 +89,7 @@ function App() {
       <HowItWorks />
       <WisprCallout />
       <NativeIntegration />
+      <WhatsNext />
 
       <DashboardSection>
         <div className={`grid gap-6 ${

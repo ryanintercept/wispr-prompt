@@ -50,19 +50,21 @@ export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, chi
 
       {children}
 
-      <footer className="border-t border-border py-4 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-xs text-text-secondary text-center">
-            Built by Ryan for{' '}
-            <a
-              href="https://wisprflow.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:text-primary-hover transition-colors font-medium"
-            >
-              Wispr Flow
-            </a>
-          </p>
+      <footer className="border-t border-border py-6 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-3">
+          <p className="text-xs text-text-secondary">Built by Ryan as a feature concept for</p>
+          <a
+            href="https://wisprflow.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <img
+              src="https://cdn.prod.website-files.com/682f84b3838c89f8ff7667db/683215c6f233131a07d8bafc_navbar_logo.svg"
+              alt="Flow"
+              className="h-5 invert"
+            />
+          </a>
         </div>
       </footer>
     </div>
