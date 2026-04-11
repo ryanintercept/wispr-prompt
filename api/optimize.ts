@@ -23,8 +23,8 @@ async function callAnthropic(apiKey: string, body: { model: string; max_tokens: 
 }
 
 async function callGemini(apiKey: string, body: { system: string; messages: { role: string; content: string }[]; max_tokens: number }) {
-  const model = 'gemini-1.5-flash';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const model = 'gemini-2.0-flash-001';
+  const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: 'POST',
