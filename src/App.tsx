@@ -5,6 +5,7 @@ import { ProblemSection } from './components/Landing/ProblemSection';
 import { HowItWorks } from './components/Landing/HowItWorks';
 import { WisprCallout } from './components/Landing/WisprCallout';
 import { NativeIntegration } from './components/Landing/NativeIntegration';
+import { ModelStrip } from './components/Landing/ModelStrip';
 import { DashboardSection } from './components/Landing/DashboardSection';
 import { InputPanel } from './components/Input/InputPanel';
 import { OutputPanel } from './components/Output/OutputPanel';
@@ -82,6 +83,7 @@ function App() {
   return (
     <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => setIsDemoMode(!isDemoMode)}>
       <LandingHero />
+      <ModelStrip />
       <ProblemSection />
       <HowItWorks />
       <WisprCallout />

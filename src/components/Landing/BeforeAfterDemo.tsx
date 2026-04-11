@@ -1,5 +1,5 @@
-import { ArrowRight, Mic, FileCode } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { ArrowRight, Mic, FileCode, RotateCcw } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useFadeIn } from '../../hooks/useFadeIn';
 
 const messy = `okay so i need to build like a dashboard thing for users to track their workouts, it should show like the past week and let them add new ones, oh and it needs to work on mobile too, using react`;
@@ -43,21 +43,25 @@ export function BeforeAfterDemo() {
   const [typedMessy, setTypedMessy] = useState('');
   const [showStructured, setShowStructured] = useState(false);
   const [structuredChars, setStructuredChars] = useState(0);
+  const [done, setDone] = useState(false);
   const hasStarted = useRef(false);
+  const timers = useRef<ReturnType<typeof setInterval>[]>([]);
 
-  useEffect(() => {
-    if (!isVisible || hasStarted.current) return;
-    hasStarted.current = true;
+  const runAnimation = useCallback(() => {
+    timers.current.forEach(clearInterval);
+    timers.current = [];
+    setTypedMessy('');
+    setShowStructured(false);
+    setStructuredChars(0);
+    setDone(false);
 
-    // Type out the messy prompt
     let i = 0;
     const typeInterval = setInterval(() => {
       i++;
       setTypedMessy(messy.slice(0, i));
       if (i >= messy.length) {
         clearInterval(typeInterval);
-        // Pause then reveal structured output
-        setTimeout(() => {
+        const t = setTimeout(() => {
           setShowStructured(true);
           let j = 0;
           const buildInterval = setInterval(() => {
@@ -66,20 +70,38 @@ export function BeforeAfterDemo() {
             if (j >= structured.length) {
               setStructuredChars(structured.length);
               clearInterval(buildInterval);
+              setDone(true);
             }
           }, 12);
+          timers.current.push(buildInterval);
         }, 400);
+        timers.current.push(t as unknown as ReturnType<typeof setInterval>);
       }
     }, 18);
+    timers.current.push(typeInterval);
+  }, []);
 
-    return () => clearInterval(typeInterval);
-  }, [isVisible]);
+  useEffect(() => {
+    if (!isVisible || hasStarted.current) return;
+    hasStarted.current = true;
+    runAnimation();
+    return () => timers.current.forEach(clearInterval);
+  }, [isVisible, runAnimation]);
 
   return (
-    <div
-      ref={ref}
-      className={`grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-3 items-stretch max-w-5xl mx-auto mt-12 fade-in-up ${isVisible ? 'visible' : ''}`}
-    >
+    <div ref={ref} className={`mt-12 fade-in-up ${isVisible ? 'visible' : ''}`}>
+    {done && (
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={runAnimation}
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-text-secondary hover:text-text border border-border hover:border-text-secondary/40 rounded-lg transition-all"
+        >
+          <RotateCcw size={12} />
+          Replay
+        </button>
+      </div>
+    )}
+    <div className={`grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-3 items-stretch max-w-5xl mx-auto`}>
       {/* Before */}
       <div className="rounded-2xl border border-border bg-surface overflow-hidden shadow-sm">
         <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
@@ -131,6 +153,7 @@ export function BeforeAfterDemo() {
           </pre>
         </div>
       </div>
+    </div>
     </div>
   );
 }
