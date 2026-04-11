@@ -12,20 +12,35 @@ async function callAnthropic(apiKey: string, body: { model: string; max_tokens: 
     },
     body: JSON.stringify(body),
   });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Anthropic error ${response.status}: ${errorText}`);
-  }
-
+  if (!response.ok) throw new Error(`Anthropic error ${response.status}: ${await response.text()}`);
   const data = await response.json() as { content: { text: string }[] };
   return data.content[0].text;
+}
+
+async function callOpenAI(apiKey: string, body: { system: string; messages: { role: string; content: string }[]; max_tokens: number }) {
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      max_tokens: body.max_tokens,
+      messages: [
+        { role: 'system', content: body.system },
+        ...body.messages,
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`OpenAI error ${response.status}: ${await response.text()}`);
+  const data = await response.json() as { choices: { message: { content: string } }[] };
+  return data.choices[0].message.content;
 }
 
 async function callGemini(apiKey: string, body: { system: string; messages: { role: string; content: string }[]; max_tokens: number }) {
   const model = 'gemini-2.0-flash-001';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -38,12 +53,7 @@ async function callGemini(apiKey: string, body: { system: string; messages: { ro
       generationConfig: { maxOutputTokens: body.max_tokens },
     }),
   });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Gemini error ${response.status}: ${errorText}`);
-  }
-
+  if (!response.ok) throw new Error(`Gemini error ${response.status}: ${await response.text()}`);
   const data = await response.json() as { candidates: { content: { parts: { text: string }[] } }[] };
   return data.candidates[0].content.parts[0].text;
 }
@@ -54,9 +64,10 @@ export default async function handler(request: Request) {
   }
 
   const anthropicKey = process.env.ANTHROPIC_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
 
-  if (!anthropicKey && !geminiKey) {
+  if (!anthropicKey && !openaiKey && !geminiKey) {
     return new Response(JSON.stringify({ error: 'No API key configured' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
@@ -71,11 +82,12 @@ export default async function handler(request: Request) {
 
     if (anthropicKey) {
       text = await callAnthropic(anthropicKey, { model: model || 'claude-sonnet-4-20250514', max_tokens: max_tokens || 2000, system, messages });
+    } else if (openaiKey) {
+      text = await callOpenAI(openaiKey, { system, messages, max_tokens: max_tokens || 2000 });
     } else {
       text = await callGemini(geminiKey!, { system, messages, max_tokens: max_tokens || 2000 });
     }
 
-    // Return in Anthropic-compatible format so the frontend doesn't need changes
     return new Response(JSON.stringify({ content: [{ text }] }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
