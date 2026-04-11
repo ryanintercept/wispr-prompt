@@ -82,7 +82,16 @@ function App() {
   const isWorking = optimizer.isOptimizing || optimizer.isExtracting;
 
   return (
-    <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => setIsDemoMode(!isDemoMode)}>
+    <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => {
+          setIsDemoMode(prev => {
+            if (prev) {
+              // switching to live — clear example lock so real API is called
+              setSelectedExampleId(null);
+              optimizer.reset();
+            }
+            return !prev;
+          });
+        }}>
       <LandingHero />
       <ModelStrip />
       <ProblemSection />

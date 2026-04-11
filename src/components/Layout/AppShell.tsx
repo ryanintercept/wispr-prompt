@@ -31,15 +31,17 @@ export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, chi
               <h1 className="text-lg font-bold text-text tracking-tight">
                 Wispr Prompt
               </h1>
-              {isDemoMode && (
-                <button
-                  onClick={onToggleDemoMode}
-                  className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 transition-colors"
-                  title="Click to toggle demo mode"
-                >
-                  Demo
-                </button>
-              )}
+              <button
+                onClick={onToggleDemoMode}
+                className={`px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full border transition-colors ${
+                  isDemoMode
+                    ? 'bg-amber-500/20 text-amber-400 border-amber-500/30 hover:bg-amber-500/30'
+                    : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30'
+                }`}
+                title={isDemoMode ? 'Click to go live' : 'Click to use demo examples'}
+              >
+                {isDemoMode ? 'Demo' : 'Live'}
+              </button>
             </div>
             <div className="flex items-center gap-2">
               <ModeToggle mode={mode} onChange={onModeChange} />
