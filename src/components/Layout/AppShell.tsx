@@ -6,12 +6,10 @@ import type { AppMode } from '../../types';
 interface AppShellProps {
   mode: AppMode;
   onModeChange: (mode: AppMode) => void;
-  isDemoMode: boolean;
-  onToggleDemoMode: () => void;
   children: React.ReactNode;
 }
 
-export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, children }: AppShellProps) {
+export function AppShell({ mode, onModeChange, children }: AppShellProps) {
   const progress = useScrollProgress();
 
   return (
@@ -31,17 +29,6 @@ export function AppShell({ mode, onModeChange, isDemoMode, onToggleDemoMode, chi
               <h1 className="text-lg font-bold text-text tracking-tight">
                 Wispr Prompt
               </h1>
-              <button
-                onClick={onToggleDemoMode}
-                className={`px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full border transition-colors ${
-                  isDemoMode
-                    ? 'bg-amber-500/20 text-amber-400 border-amber-500/30 hover:bg-amber-500/30'
-                    : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30'
-                }`}
-                title={isDemoMode ? 'Click to go live' : 'Click to use demo examples'}
-              >
-                {isDemoMode ? 'Demo' : 'Live'}
-              </button>
             </div>
             <div className="flex items-center gap-2">
               <ModeToggle mode={mode} onChange={onModeChange} />

@@ -22,12 +22,11 @@ function App() {
   const [rawInput, setRawInput] = useState('');
   const [targetModel, setTargetModel] = useState<TargetModel>('claude');
   const [taskType, setTaskType] = useState<TaskType | 'auto'>('auto');
-  const [isDemoMode, setIsDemoMode] = useState(true);
   const [selectedExampleId, setSelectedExampleId] = useState<string | null>(null);
 
   useDarkMode();
   const outputRef = useRef<HTMLDivElement>(null);
-  const optimizer = useOptimizer(isDemoMode);
+  const optimizer = useOptimizer(false);
 
   const handleTranscript = useCallback((text: string) => {
     setRawInput((prev) => (prev ? prev + ' ' + text : text));
@@ -82,16 +81,7 @@ function App() {
   const isWorking = optimizer.isOptimizing || optimizer.isExtracting;
 
   return (
-    <AppShell mode={mode} onModeChange={setMode} isDemoMode={isDemoMode} onToggleDemoMode={() => {
-          setIsDemoMode(prev => {
-            if (prev) {
-              // switching to live — clear example lock so real API is called
-              setSelectedExampleId(null);
-              optimizer.reset();
-            }
-            return !prev;
-          });
-        }}>
+    <AppShell mode={mode} onModeChange={setMode}>
       <LandingHero />
       <ModelStrip />
       <ProblemSection />
