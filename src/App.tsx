@@ -10,15 +10,13 @@ import { WhatsNext } from './components/Landing/WhatsNext';
 import { DashboardSection } from './components/Landing/DashboardSection';
 import { InputPanel } from './components/Input/InputPanel';
 import { OutputPanel } from './components/Output/OutputPanel';
-import { ComponentEditor } from './components/Advanced/ComponentEditor';
 import { Toast } from './components/shared/Toast';
 import { useVoiceInput } from './hooks/useVoiceInput';
 import { useOptimizer } from './hooks/useOptimizer';
 import { useDarkMode } from './hooks/useDarkMode';
-import type { AppMode, TargetModel, TaskType } from './types';
+import type { TargetModel, TaskType } from './types';
 
 function App() {
-  const [mode, setMode] = useState<AppMode>('quick');
   const [rawInput, setRawInput] = useState('');
   const [targetModel, setTargetModel] = useState<TargetModel>('claude');
   const [taskType, setTaskType] = useState<TaskType | 'auto'>('auto');
@@ -43,14 +41,9 @@ function App() {
 
   const handleOptimize = useCallback(() => {
     if (!rawInput.trim()) return;
-
-    if (mode === 'advanced') {
-      optimizer.extract(rawInput, selectedExampleId);
-    } else {
-      const override = taskType === 'auto' ? undefined : taskType;
-      optimizer.optimize(rawInput, targetModel, override, selectedExampleId);
-    }
-  }, [rawInput, targetModel, taskType, mode, optimizer, selectedExampleId]);
+    const override = taskType === 'auto' ? undefined : taskType;
+    optimizer.optimize(rawInput, targetModel, override, selectedExampleId);
+  }, [rawInput, targetModel, taskType, optimizer, selectedExampleId]);
 
   const handleRegenerate = useCallback(() => {
     if (!rawInput.trim()) return;
@@ -81,7 +74,7 @@ function App() {
   const isWorking = optimizer.isOptimizing || optimizer.isExtracting;
 
   return (
-    <AppShell mode={mode} onModeChange={setMode}>
+    <AppShell>
       <LandingHero />
       <ModelStrip />
       <ProblemSection />
@@ -91,11 +84,7 @@ function App() {
       <WhatsNext />
 
       <DashboardSection>
-        <div className={`grid gap-6 ${
-          mode === 'advanced' && optimizer.components
-            ? 'grid-cols-1 lg:grid-cols-3'
-            : 'grid-cols-1 lg:grid-cols-2'
-        }`}>
+        <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
           <InputPanel
             rawInput={rawInput}
             onInputChange={setRawInput}
@@ -112,15 +101,6 @@ function App() {
             onOptimize={handleOptimize}
             isOptimizing={isWorking}
           />
-
-          {mode === 'advanced' && optimizer.components && (
-            <ComponentEditor
-              components={optimizer.components}
-              onChange={optimizer.setComponents}
-              onReoptimize={handleReoptimize}
-              isOptimizing={optimizer.isOptimizing}
-            />
-          )}
 
           <div ref={outputRef}>
             <OutputPanel
