@@ -51,11 +51,6 @@ function App() {
     optimizer.optimize(rawInput, targetModel, override, selectedExampleId);
   }, [rawInput, targetModel, taskType, optimizer, selectedExampleId]);
 
-  const handleReoptimize = useCallback(() => {
-    if (optimizer.components) {
-      optimizer.formatFromComponents(optimizer.components, targetModel, selectedExampleId);
-    }
-  }, [optimizer, targetModel, selectedExampleId]);
 
   const handleModelChange = useCallback((model: TargetModel) => {
     setTargetModel(model);
